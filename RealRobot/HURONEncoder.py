@@ -16,17 +16,16 @@ class HURONEncoder(Encoder):
     @property
     def count(self) -> int:
         # reads from ODrive
-        self._count = self._odrive.get_decoded_msg(
+        self._count = self._odrive.get_cmd(
                 "Get_Encoder_Count")["Shadow_Count"]
         # updates self._count
         return self._count
 
     def reset(self) -> None:
+        # Cannot reset ODrive!!
         super().reset
-        # resets ODrive
-        pass
 
     def get_velocity(self):
         # reads from ODrive
-        self._count = self._odrive.get_decoded_msg(
+        self._count = self._odrive.get_cmd(
                 "Get_Encoder_Estimates")["Vel_Estimate"]
