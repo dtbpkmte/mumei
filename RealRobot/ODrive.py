@@ -1,5 +1,3 @@
-import time
-
 import can
 import cantools
 
@@ -16,7 +14,8 @@ class ODrive:
     def send_cmd(self, name_of_command, cmd_input) -> None:
         msg = self.db.get_message_by_name(name_of_command)
         data = msg.encode(cmd_input)
-        msg = can.Message(arbitration_id=self.axis << 5 | msg.frame_id, is_extended_id=False, data=data)
+        msg = can.Message(arbitration_id=self.axis << 5 | msg.frame_id,
+                          is_extended_id=False, data=data)
         self.bus.send(msg)
 
     def __change_state(self, s):
@@ -29,7 +28,8 @@ class ODrive:
 
     def get_cmd(self, name_of_command, cmd_input):
         msg = self.bus.recv()
-        arbID = ((self.axis << 5) | self.db.get_message_by_name(name_of_command).frame_id)
+        arbID = ((self.axis << 5) |
+                 self.db.get_message_by_name(name_of_command).frame_id)
 
         while True:
             msg = self.bus.recv()
