@@ -22,10 +22,10 @@ class ODrive:
     def __change_state(self, s):
         try:
             self._states[s]
-        except:
+        except KeyError:
             print("Motor %2d :Unknown state" + s % self.can_id)
-        self._o_drive.send_cmd('Set_Axis_State', {
-            'Axis_Requested_State': self._states[s]})
+        self._o_drive.send_cmd('Set_Axis_State',
+                               {'Axis_Requested_State': self._states[s]})
 
     def get_cmd(self, name_of_command, cmd_input):
         msg = self.bus.recv()
@@ -36,3 +36,32 @@ class ODrive:
             if msg.arbitration_id == arbID:
                 break
         return self.db.decode_message(name_of_command, msg.data)[cmd_input]
+
+
+    """
+        Setup the velocity and current limit for the motor => Motor is ready to use
+    """
+
+    def set_up(self, velocity_limit, current_limit):
+        self._o_drive.send_cmd('Set_Controller_Mode', {
+            'Input_Mode': 1, 'Control_Mode': 3})
+        self._o_drive.change_state("closeloop")
+        print("Entering closed loop")
+        time.sleep(1)
+        self._o_drive.send_cmd(
+            'Set_Limits', {'Velocity_Limit': velocity_limit, 'Current_Limit': current_limit})
+
+    def calibrate(self) -> None:
+        print("Motor %2d: Calibrating..." % self.can_id)
+        self._o_drive.change_state("calib")
+        time.sleep(25)  # Standard time for motor calibration
+        print("Motor %2d: Done calibrating." % self.can_id)
+
+    """
+        Private method
+    """
+
+    def terminate(self) -> None:
+        self._o_drive.change_state("idle")
+        print("Motor %2d: Terminated." % self.can_id)
+        pass
