@@ -1,6 +1,5 @@
 import Motor
 import can
-import ODrive
 
 
 class TorqueMotor(Motor):
@@ -8,10 +7,10 @@ class TorqueMotor(Motor):
     Initialization to start reading the motor
     """
 
-    def __init__(self, can_id: str, axis_id: int):
+    def __init__(self, odrive):
         # Init CAN port and store database
         self._desired_value = 0
-        self._o_drive = ODrive(can_id, axis_id)
+        self._o_drive = odrive
 
     def move_motor(self, goal: float) -> bool:
         print("Motor %2d: Setting torque to %f" % (self.can_id, goal))
