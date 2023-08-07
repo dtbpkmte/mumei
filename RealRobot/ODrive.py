@@ -1,5 +1,6 @@
 import can
 import cantools
+import time
 
 
 class ODrive:
@@ -7,8 +8,8 @@ class ODrive:
         # Init CAN port and store database
         self.axis = axis_id
         self.can_id = can_id
-        self.database = cantools.database.load_file("odrive-cansimple.dbc")
-        self._states = {"idle": 0x01, "calib": 0x03, "close-loop": 0x08}
+        self.db = cantools.database.load_file("odrive-cansimple.dbc")
+        self._states = {"idle": 0x01, "calib": 0x03, "closeloop": 0x08}
         self.bus = can.Bus(can_id, bustype="socketcan")
 
     def send_cmd(self, name_of_command, cmd_input) -> None:
@@ -18,13 +19,13 @@ class ODrive:
                           is_extended_id=False, data=data)
         self.bus.send(msg)
 
-    def __change_state(self, s):
+    def change_state(self, s):
         try:
             self._states[s]
         except KeyError:
-            print("Motor %2d :Unknown state" + s % self.can_id)
-        self._o_drive.send_cmd('Set_Axis_State',
-                               {'Axis_Requested_State': self._states[s]})
+            print(f"Motor {self.can_id}: Unknown state")
+        self.send_cmd('Set_Axis_State',
+                      {'Axis_Requested_State': self._states[s]})
 
     def get_cmd(self, name_of_command, cmd_input):
         msg = self.bus.recv()
@@ -35,6 +36,8 @@ class ODrive:
             msg = self.bus.recv()
             if msg.arbitration_id == arbID:
                 break
+            print(arbID)
+            print(msg)
         return self.db.decode_message(name_of_command, msg.data)[cmd_input]
 
 
@@ -43,25 +46,27 @@ class ODrive:
     """
 
     def set_up(self, velocity_limit, current_limit):
-        self._o_drive.send_cmd('Set_Controller_Mode', {
+        self.send_cmd('Set_Controller_Mode', {
             'Input_Mode': 1, 'Control_Mode': 3})
-        self._o_drive.change_state("closeloop")
+        self.change_state("closeloop")
         print("Entering closed loop")
         time.sleep(1)
-        self._o_drive.send_cmd(
-            'Set_Limits', {'Velocity_Limit': velocity_limit, 'Current_Limit': current_limit})
+        self.send_cmd(
+            'Set_Limits', {'Velocity_Limit': velocity_limit,
+                           'Current_Limit': current_limit})
+        print("Limits set")
 
     def calibrate(self) -> None:
-        print("Motor %2d: Calibrating..." % self.can_id)
-        self._o_drive.change_state("calib")
+        print(f"Motor {self.can_id}: Calibrating...")
+        self.change_state("calib")
         time.sleep(25)  # Standard time for motor calibration
-        print("Motor %2d: Done calibrating." % self.can_id)
+        print(f"Motor {self.can_id}: Done calibrating.")
 
     """
         Private method
     """
 
     def terminate(self) -> None:
-        self._o_drive.change_state("idle")
-        print("Motor %2d: Terminated." % self.can_id)
+        self.change_state("idle")
+        print(f"Motor {self.can_id}: Terminated.")
         pass

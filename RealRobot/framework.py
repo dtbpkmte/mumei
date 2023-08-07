@@ -1,14 +1,20 @@
 # This file will be renamed
 
 def setup(f_setup):
-    # Pre-processing
-    f_setup()
-    # Post-processing
+    def wrapper():
+        # Pre-processing
+        print("Framework terminating...")
+
+        # User-defined setup function
+        f_setup()
+
+        # Post-processing
+    return wrapper
 
 
-def loop():
+def loop() -> None:
     pass
 
 
-def terminate():
-    pass
+def terminate() -> None:
+    print("Framework terminating...")

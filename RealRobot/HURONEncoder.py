@@ -10,6 +10,7 @@ class HURONEncoder(Encoder):
     def __init__(self, odrive: ODrive):
         self._count = 0
         self._prev_count = 0
+        self._cpr = 4096
 
         self._odrive = odrive
 
@@ -17,7 +18,7 @@ class HURONEncoder(Encoder):
     def count(self) -> int:
         # reads from ODrive
         self._count = self._odrive.get_cmd(
-                "Get_Encoder_Count")["Shadow_Count"]
+                "Get_Encoder_Count", "Shadow_Count")
         # updates self._count
         return self._count
 
@@ -28,4 +29,4 @@ class HURONEncoder(Encoder):
     def get_velocity(self):
         # reads from ODrive
         self._count = self._odrive.get_cmd(
-                "Get_Encoder_Estimates")["Vel_Estimate"]
+                "Get_Encoder_Estimates", "Vel_Estimate")

@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import time
 
 
 class Motor(ABC):
@@ -8,11 +7,15 @@ class Motor(ABC):
     """
 
     @property
-    def desired_value(self):
+    def desired_value(self) -> float:
         return self._desired_value
 
     @abstractmethod
     def move_motor(self, val: float) -> bool:
+        pass
+
+    @abstractmethod
+    def stop_motor(self) -> bool:
         pass
 
     """
