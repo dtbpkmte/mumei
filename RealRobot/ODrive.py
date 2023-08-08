@@ -1,6 +1,7 @@
 import can
 import cantools
 import time
+import odrive
 
 
 class ODrive:
@@ -36,35 +37,39 @@ class ODrive:
             msg = self.bus.recv()
             if msg.arbitration_id == arbID:
                 break
-            print(arbID)
-            print(msg)
         return self.db.decode_message(name_of_command, msg.data)[cmd_input]
 
-
-    """
-        Setup the velocity and current limit for the motor => Motor is ready to use
-    """
-
-    def set_up(self, velocity_limit, current_limit):
+    def configure(
+            self,
+            velocity_limit: float,
+            current_limit: float,
+            input_mode: odrive.enums.InputMode,
+            control_mode: odrive.enums.ControlMode) -> bool:
+        """
+        Configure the velocity and current limits for the motor.
+        """
         self.send_cmd('Set_Controller_Mode', {
-            'Input_Mode': 1, 'Control_Mode': 3})
-        self.change_state("closeloop")
-        print("Entering closed loop")
+            'Input_Mode': input_mode,
+            'Control_Mode': control_mode})
+        print("Controller mode set")
         time.sleep(1)
         self.send_cmd(
             'Set_Limits', {'Velocity_Limit': velocity_limit,
                            'Current_Limit': current_limit})
         print("Limits set")
 
+    def set_up(self) -> None:
+        """
+        Put motor into closed-loop mode.
+        """
+        print("Entering closed loop")
+        self.change_state("closeloop")
+
     def calibrate(self) -> None:
         print(f"Motor {self.can_id}: Calibrating...")
         self.change_state("calib")
-        time.sleep(25)  # Standard time for motor calibration
+        # time.sleep(25)  # Standard time for motor calibration
         print(f"Motor {self.can_id}: Done calibrating.")
-
-    """
-        Private method
-    """
 
     def terminate(self) -> None:
         self.change_state("idle")

@@ -17,10 +17,14 @@ class Joint():
     def __init__(self,
                  joint_type: JointTypes,
                  motor: Motor,
-                 encoder: Encoder = None):
+                 encoder: Encoder = None,
+                 gear_ratio_1: float = 1,
+                 gear_ratio_2: float = 1):
         self._joint_type = joint_type
         self._motor = motor
         self._encoder = encoder
+        self._gear_ratio_1 = gear_ratio_1
+        self._gear_ratio_2 = gear_ratio_2
 
         self._position = 0
         self._velocity = 0
@@ -36,14 +40,18 @@ class Joint():
         """
         Joint position in [rad] for REVOLUTE joints, [m] for PRISMATIC joints.
         """
-        pass
+        # TODO: move this to a separate RevoluteJoint class
+        return self._encoder.get_angle_rad() / self._gear_ratio_1 / \
+            self._gear_ratio_2
 
     def get_velocity(self) -> float:
         """
         Joint velocity in [rad/s] for REVOLUTE joints,
         [m/s] for PRISMATIC joints.
         """
-        pass
+        # TODO: move this to a separate RevoluteJoint class
+        return self._encoder.get_velocity_rad() / self._gear_ratio_1 / \
+            self._gear_ratio_2
 
     def get_acceleration(self) -> float:
         """

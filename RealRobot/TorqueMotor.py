@@ -1,5 +1,6 @@
 from Motor import Motor
 from ODrive import ODrive
+from odrive.enums import InputMode, ControlMode
 
 
 class TorqueMotor(Motor):
@@ -12,10 +13,30 @@ class TorqueMotor(Motor):
         self._desired_value = 0
         self._odrive = odrive
 
+    def configure(self, *args, **kwargs) -> bool:
+        """Configure torque motor.
+
+        Parameters:
+        velocity_limit (float)
+        current_limit (float)
+        """
+        self._velocity_limit = kwargs['velocity_limit']
+        self._current_limit = kwargs['current_limit']
+
+        self._odrive.configure(
+            velocity_limit=self._velocity_limit,
+            current_limit=self._current_limit,
+            input_mode=InputMode.PASSTHROUGH,
+            control_mode=ControlMode.TORQUE_CONTROL)
+
+        return True
+
+    def set_up(self, *args, **kwargs) -> None:
+        self._odrive.set_up()
+
     def move_motor(self, goal: float) -> bool:
         print(f"Motor {self._odrive.can_id}: Setting torque to {goal}")
         self._desired_value = goal
-        self._odrive.change_state("idle")
         self._odrive.send_cmd("Set_Input_Torque", {'Input_Torque': goal})
         return True
 

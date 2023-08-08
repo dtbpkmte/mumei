@@ -13,7 +13,12 @@ def setup(f_setup):
 
 
 def loop() -> None:
-    pass
+    while True:
+        try:
+            pass
+        except KeyboardInterrupt:
+            print("Keyboard interrupted. Exitting...")
+            break
 
 
 def terminate() -> None:
