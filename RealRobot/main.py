@@ -1,5 +1,5 @@
 import framework
-from ODrive import ODriveController
+from ODriveController import ODriveController
 from Robot import Robot
 from Joint import JointTypes
 from HURONJoint import HURONJoint
