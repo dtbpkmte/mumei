@@ -4,7 +4,7 @@ import time
 import odrive
 
 
-class ODrive:
+class ODriveController:
     def __init__(self, can_id: str, axis_id: int) -> None:
         # Init CAN port and store database
         self.axis = axis_id

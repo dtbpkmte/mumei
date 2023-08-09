@@ -3,13 +3,13 @@ import Joint
 
 class Limb:
     def __init__(self):
-        hip = Joint
-        knee = Joint
-        ankle = Joint
-        self.joints = {hip, knee, ankle}
+        self.joints = []
         self.position = 0
         self.velocity = 0
         self.acceleration = 0
+
+    def add_joint(self, joint):
+        self.append(joint)
 
     def move_limb_by_velocity(self):
         pass

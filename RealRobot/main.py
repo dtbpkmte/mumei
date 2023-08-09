@@ -1,5 +1,5 @@
 import framework
-from ODrive import ODrive
+from ODrive import ODriveController
 from Robot import Robot
 from Joint import JointTypes
 from HURONJoint import HURONJoint
@@ -17,10 +17,10 @@ if __name__ == '__main__':
     gear_ratio_2 = 40.0
 
     # ODrives
-    left_hip_pitch_od = ODrive("can0", 0x1)
-    left_knee_pitch_od = ODrive("can0", 0x0)
-    right_hip_pitch_od = ODrive("can1", 0x7)
-    right_knee_pitch_od = ODrive("can1", 0x6)
+    left_hip_pitch_od = ODriveController("can0", 0x1)
+    left_knee_pitch_od = ODriveController("can0", 0x0)
+    right_hip_pitch_od = ODriveController("can1", 0x7)
+    right_knee_pitch_od = ODriveController("can1", 0x6)
 
     # Motors
     left_hip_pitch_motor = TorqueMotor(left_hip_pitch_od)

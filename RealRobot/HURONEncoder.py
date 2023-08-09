@@ -1,5 +1,5 @@
 from Encoder import Encoder
-from ODrive import ODrive
+from ODrive import ODriveController
 
 
 class HURONEncoder(Encoder):
@@ -7,7 +7,7 @@ class HURONEncoder(Encoder):
     Implements HURON-specific encoders.
     """
 
-    def __init__(self, odrive: ODrive):
+    def __init__(self, odrive: ODriveController):
         self._count = 0
         self._prev_count = 0
         self._cpr = 4096
