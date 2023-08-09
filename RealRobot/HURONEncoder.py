@@ -1,5 +1,5 @@
 from Encoder import Encoder
-from ODrive import ODriveController
+from ODriveController import ODriveController
 
 
 class HURONEncoder(Encoder):
