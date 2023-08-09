@@ -97,8 +97,8 @@ if __name__ == '__main__':
     print("Moving joint...")
     # left_knee_pitch_joint.move(-1.0)
     # right_knee_pitch_joint.move(1.0)
-    left_hip_pitch_joint.move(-1.0)
-    right_hip_pitch_joint.move(1.0)
+    left_hip_pitch_joint.move(1.0)
+    right_hip_pitch_joint.move(-0.8)
 
     start_time = time.time()
 
