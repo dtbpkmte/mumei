@@ -1,4 +1,4 @@
-from Joint import Joint
+from mumei.Joint import Joint
 
 
 class HURONJoint(Joint):

@@ -1,4 +1,4 @@
-from Motor import Motor
+from mumei.Motor import Motor
 from ODriveController import ODriveController
 from odrive.enums import InputMode, ControlMode
 

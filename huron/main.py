@@ -1,7 +1,7 @@
-import framework
+import mumei
+from mumei.Robot import Robot
+from mumei.Joint import JointTypes
 from ODriveController import ODriveController
-from Robot import Robot
-from Joint import JointTypes
 from HURONJoint import HURONJoint
 from TorqueMotor import TorqueMotor
 from HURONEncoder import HURONEncoder
@@ -137,6 +137,6 @@ if __name__ == '__main__':
     right_hip_pitch_od.terminate()
     right_knee_pitch_od.terminate()
 
-    framework.loop()
+    mumei.loop()
 
-    framework.terminate()
+    mumei.terminate()

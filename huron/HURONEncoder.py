@@ -1,4 +1,4 @@
-from Encoder import Encoder
+from mumei.Encoder import Encoder
 from ODriveController import ODriveController
 
 
