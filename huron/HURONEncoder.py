@@ -1,3 +1,4 @@
+from overrides import override
 from mumei.Encoder import Encoder
 from ODriveController import ODriveController
 
@@ -15,6 +16,7 @@ class HURONEncoder(Encoder):
         self._odrive = odrive
 
     @property
+    @override
     def count(self) -> float:
         # reads from ODrive
         # self._count = self._odrive.get_cmd(
@@ -24,10 +26,7 @@ class HURONEncoder(Encoder):
         # updates self._count
         return self._count
 
-    def reset(self) -> None:
-        # Cannot reset ODrive!!
-        super().reset()
-
+    @override
     def get_velocity(self):
         # reads from ODrive
         return self._odrive.get_cmd(

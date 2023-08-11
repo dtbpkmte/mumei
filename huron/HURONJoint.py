@@ -11,6 +11,3 @@ class HURONJoint(Joint):
     #
     # def get_velocity(self) -> float:
     #     return self._encoder.get_velocity_rad()
-
-    def get_acceleration(self) -> float:
-        pass

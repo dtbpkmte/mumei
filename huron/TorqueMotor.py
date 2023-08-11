@@ -1,3 +1,4 @@
+from overrides import override
 from mumei.Motor import Motor
 from ODriveController import ODriveController
 from odrive.enums import InputMode, ControlMode
@@ -15,7 +16,8 @@ class TorqueMotor(Motor):
         self._desired_value = 0
         self._odrive = odrive
 
-    def configure(self, *args, **kwargs) -> bool:
+    @override
+    def configure(self, *args, **kwargs) -> None:
         """Configure torque motor.
 
         Parameters:
@@ -31,27 +33,31 @@ class TorqueMotor(Motor):
             input_mode=InputMode.PASSTHROUGH,
             control_mode=ControlMode.TORQUE_CONTROL)
 
-        return True
+    @override
+    def initialize(self, *args, **kwargs) -> None:
+        pass
 
+    @override
     def set_up(self, *args, **kwargs) -> None:
         self._odrive.set_up()
 
-    def move_motor(self, goal: float) -> bool:
-        print(f"Motor {self._odrive.can_id}: Setting torque to {goal}")
-        self._desired_value = goal
-        self._odrive.send_cmd("Set_Input_Torque", {'Input_Torque': goal})
+    @override
+    def move(self, val: float, *args, **kwargs) -> bool:
+        print(f"Motor {self._odrive.can_id}: Setting torque to {val}")
+        self._desired_value = val
+        self._odrive.send_cmd("Set_Input_Torque", {'Input_Torque': val})
         return True
 
-    def stop_motor(self) -> bool:
+    @override
+    def stop(self, *args, **kwargs) -> bool:
         print(f"Motor {self._odrive.can_id}: Stopped")
         self._odrive.terminate()
-        return self.move_motor(0)
-
-    """
-    Returns true if the motor reaches the desired value
-    """
+        return self.move(0)
 
     def reach_goal(self, print_value) -> bool:
+        """
+        Returns true if the motor reaches the desired value
+        """
         # threshold = 0.6
         # msg = self.bus.recv()
         # arbID = ((self.axis << 5) | self.db.get_message_by_name(

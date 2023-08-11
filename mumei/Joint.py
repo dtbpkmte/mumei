@@ -1,4 +1,5 @@
 from enum import Enum
+from MovingComponent import MovingComponent
 from Encoder import Encoder
 from Motor import Motor
 
@@ -8,7 +9,7 @@ class JointTypes(Enum):
     PRISMATIC = 2
 
 
-class Joint():
+class Joint(MovingComponent):
     """
     Base class that represents a 1-DoF joint. Each joint consists of a [Motor]
     and possibly an [Encoder].
@@ -30,10 +31,10 @@ class Joint():
         self._velocity = 0
         self._acceleration = 0
 
-    def move(self, val: float):
+    def move(self, val: float, *args, **kwargs):
         self._motor.move_motor(val)
 
-    def stop(self):
+    def stop(self, *args, **kwargs):
         self._motor.stop_motor()
 
     def get_position(self) -> float:

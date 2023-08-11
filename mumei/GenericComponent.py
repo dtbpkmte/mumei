@@ -7,13 +7,29 @@ class GenericComponent(ABC):
     """
 
     @abstractmethod
-    def configure(self, *args, **kwargs):
+    def configure(self, *args, **kwargs) -> None:
+        """
+        Configure the component.
+        """
         pass
 
     @abstractmethod
-    def set_up(self, *args, **kwargs):
+    def initialize(self, *args, **kwargs) -> None:
+        """
+        Initialize the component.
+        """
         pass
 
     @abstractmethod
-    def terminate(self, *args, **kwargs):
+    def set_up(self, *args, **kwargs) -> None:
+        """
+        Set up the component.
+        """
+        pass
+
+    @abstractmethod
+    def terminate(self, *args, **kwargs) -> None:
+        """
+        Terminate the component.
+        """
         pass

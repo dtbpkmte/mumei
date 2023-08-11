@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from GenericComponent import GenericComponent
 import math
 
 
-class Encoder(ABC):
+class Encoder(GenericComponent):
     """
     Abstract class for encoders.
     """

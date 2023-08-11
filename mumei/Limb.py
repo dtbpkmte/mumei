@@ -1,27 +1,33 @@
-import Joint
+from MovingComponent import MovingComponent
+from Joint import Joint
+from overrides import override
+from typing import List
 
 
-class Limb:
+class Limb(MovingComponent):
+    """
+    A Limb contains a list of Joints.
+    """
+
     def __init__(self):
-        self.joints = []
-        self.position = 0
-        self.velocity = 0
-        self.acceleration = 0
+        self._joints = []
 
-    def add_joint(self, joint):
+    def add_joint(self, joint: Joint):
         self.append(joint)
 
-    def move_limb_by_velocity(self):
-        pass
+    @override
+    def move(self, val: List[float], *args, **kwargs) -> bool:
+        ret = True
+        for joint in self._joints:
+            ret &= joint.move(val, *args, **kwargs)
+        return ret
 
-    def move_limb_to_position(self):
-        pass
-
-    def set_velocity(self, val: float):
-        self.velocity = float
-
-    def get_velocity(self) -> float:
-        return self.velocity
+    @override
+    def stop(self, *args, **kwargs) -> bool:
+        ret = True
+        for joint in self._joints:
+            ret &= joint.stop()
+        return ret
 
     def forward_kinematics(self):
         pass

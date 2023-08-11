@@ -7,6 +7,8 @@ from TorqueMotor import TorqueMotor
 from HURONEncoder import HURONEncoder
 import time
 import math
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 if __name__ == '__main__':
@@ -101,41 +103,56 @@ if __name__ == '__main__':
     right_hip_pitch_joint.move(-0.8)
 
     start_time = time.time()
+    stopped = False
 
-    while time.time() - start_time < 4:  # seconds
-        # lpos = math.degrees(left_knee_pitch_joint.get_position())
-        # lvel = math.degrees(left_knee_pitch_joint.get_velocity())
-        # rpos = math.degrees(right_knee_pitch_joint.get_position())
-        # rvel = math.degrees(right_knee_pitch_joint.get_velocity())
-        lpos = math.degrees(left_hip_pitch_joint.get_position())
-        lvel = math.degrees(left_hip_pitch_joint.get_velocity())
-        rpos = math.degrees(right_hip_pitch_joint.get_position())
-        rvel = math.degrees(right_hip_pitch_joint.get_velocity())
-        print(f"lpos: {lpos} deg\tlvel: {lvel} deg/s\trpos: {rpos} deg\trvel: {rvel} deg/s")
+    # plotting
+    timestamps = []
+    lpos = []
+    rpos = []
+    lvel = []
+    rvel = []
 
-    print("Stopping joints...")
-    # left_knee_pitch_joint.stop()
-    # right_knee_pitch_joint.stop()
-    left_hip_pitch_joint.stop()
-    right_hip_pitch_joint.stop()
+    while True:
+        timestamps.append(time.time())
+        lpos.append(math.degrees(left_knee_pitch_joint.get_position()))
+        lvel.append(math.degrees(left_knee_pitch_joint.get_velocity()))
+        rpos.append(math.degrees(right_knee_pitch_joint.get_position()))
+        rvel.append(math.degrees(right_knee_pitch_joint.get_velocity()))
+        # lpos.append(math.degrees(left_hip_pitch_joint.get_position()))
+        # lvel.append(math.degrees(left_hip_pitch_joint.get_velocity()))
+        # rpos.append(math.degrees(right_hip_pitch_joint.get_position()))
+        # rvel.append(math.degrees(right_hip_pitch_joint.get_velocity()))
 
-    start_time = time.time()
-    while time.time() - start_time < 5:  # seconds
-        # lpos = math.degrees(left_knee_pitch_joint.get_position())
-        # lvel = math.degrees(left_knee_pitch_joint.get_velocity())
-        # rpos = math.degrees(right_knee_pitch_joint.get_position())
-        # rvel = math.degrees(right_knee_pitch_joint.get_velocity())
-        lpos = math.degrees(left_hip_pitch_joint.get_position())
-        lvel = math.degrees(left_hip_pitch_joint.get_velocity())
-        rpos = math.degrees(right_hip_pitch_joint.get_position())
-        rvel = math.degrees(right_hip_pitch_joint.get_velocity())
-        print(f"lpos: {lpos} deg\tlvel: {lvel} deg/s\trpos: {rpos} deg\trvel: {rvel} deg/s")
+        if not stopped and time.time() - start_time >= 4:  # seconds
+            print("Stopping joints...")
+            left_knee_pitch_joint.stop()
+            right_knee_pitch_joint.stop()
+            # left_hip_pitch_joint.stop()
+            # right_hip_pitch_joint.stop()
+            stopped = True
+
+        if time.time() - start_time >= 9:  # seconds
+            break
 
     print("Terminating joint...")
     left_hip_pitch_od.terminate()
     left_knee_pitch_od.terminate()
     right_hip_pitch_od.terminate()
     right_knee_pitch_od.terminate()
+
+    # Plot data
+    timestamps = np.array(timestamps)
+    timestamps -= timestamps[0]
+    lpos = np.array(lpos)
+    rpos = np.array(rpos)
+    lvel = np.array(lvel)
+    rvel = np.array(rvel)
+
+    plt.plot(timestamps, lpos, label="lpos")
+    plt.plot(timestamps, rpos, label="rpos")
+    plt.plot(timestamps, lvel, label="lvel")
+    plt.plot(timestamps, rvel, label="rvel")
+    plt.show()
 
     mumei.loop()
 
