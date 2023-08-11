@@ -7,8 +7,7 @@ from TorqueMotor import TorqueMotor
 from HURONEncoder import HURONEncoder
 import time
 import math
-import matplotlib.pyplot as plt
-import numpy as np
+import csv
 
 
 if __name__ == '__main__':
@@ -106,22 +105,20 @@ if __name__ == '__main__':
     stopped = False
 
     # plotting
-    timestamps = []
-    lpos = []
-    rpos = []
-    lvel = []
-    rvel = []
+    csv_fields = ["timestamp", "lpos", "rpos", "lvel", "rvel"]
+    csv_data = []
 
     while True:
-        timestamps.append(time.time())
-        lpos.append(math.degrees(left_knee_pitch_joint.get_position()))
-        lvel.append(math.degrees(left_knee_pitch_joint.get_velocity()))
-        rpos.append(math.degrees(right_knee_pitch_joint.get_position()))
-        rvel.append(math.degrees(right_knee_pitch_joint.get_velocity()))
+        timestamp = time.time() - start_time
+        lpos = math.degrees(left_knee_pitch_joint.get_position())
+        lvel = math.degrees(left_knee_pitch_joint.get_velocity())
+        rpos = math.degrees(right_knee_pitch_joint.get_position())
+        rvel = math.degrees(right_knee_pitch_joint.get_velocity())
         # lpos.append(math.degrees(left_hip_pitch_joint.get_position()))
         # lvel.append(math.degrees(left_hip_pitch_joint.get_velocity()))
         # rpos.append(math.degrees(right_hip_pitch_joint.get_position()))
         # rvel.append(math.degrees(right_hip_pitch_joint.get_velocity()))
+        csv_data.append([timestamp, lpos, rpos, lvel, rvel])
 
         if not stopped and time.time() - start_time >= 4:  # seconds
             print("Stopping joints...")
@@ -140,19 +137,11 @@ if __name__ == '__main__':
     right_hip_pitch_od.terminate()
     right_knee_pitch_od.terminate()
 
-    # Plot data
-    timestamps = np.array(timestamps)
-    timestamps -= timestamps[0]
-    lpos = np.array(lpos)
-    rpos = np.array(rpos)
-    lvel = np.array(lvel)
-    rvel = np.array(rvel)
-
-    plt.plot(timestamps, lpos, label="lpos")
-    plt.plot(timestamps, rpos, label="rpos")
-    plt.plot(timestamps, lvel, label="lvel")
-    plt.plot(timestamps, rvel, label="rvel")
-    plt.show()
+    with open("data.csv", "w") as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(csv_fields)
+        csvwriter.writerows(csv_data)
+        print("Saved data.csv")
 
     mumei.loop()
 
