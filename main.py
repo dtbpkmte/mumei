@@ -1,10 +1,10 @@
 import mumei
 from mumei.Robot import Robot
 from mumei.Joint import JointTypes
-from ODriveController import ODriveController
-from HURONJoint import HURONJoint
-from TorqueMotor import TorqueMotor
-from HURONEncoder import HURONEncoder
+from huron.ODriveController import ODriveController
+from huron.HURONJoint import HURONJoint
+from huron.TorqueMotor import TorqueMotor
+from huron.HURONEncoder import HURONEncoder
 import time
 import math
 import csv
