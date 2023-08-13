@@ -1,9 +1,12 @@
-# This file will be renamed
+import sys
+import signal
 
-def setup(f_setup):
+
+def setup(f_setup) -> None:
     def wrapper():
         # Pre-processing
-        print("Framework terminating...")
+        signal.signal(signal.SIGINT, terminate)
+        print("MUMEI setup...")
 
         # User-defined setup function
         f_setup()
@@ -14,12 +17,9 @@ def setup(f_setup):
 
 def loop() -> None:
     while True:
-        try:
-            pass
-        except KeyboardInterrupt:
-            print("Keyboard interrupted. Exitting...")
-            break
+        pass
 
 
 def terminate() -> None:
-    print("Framework terminating...")
+    print("MUMEI terminating...")
+    sys.exit(0)
