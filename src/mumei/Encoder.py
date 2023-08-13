@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from GenericComponent import GenericComponent
+from .GenericComponent import GenericComponent
 import math
 
 

@@ -1,4 +1,4 @@
-from Limb import Limb
+from .Limb import Limb
 
 
 class Robot():

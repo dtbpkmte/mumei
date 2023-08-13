@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from MovingComponent import MovingComponent
+from .MovingComponent import MovingComponent
 
 
 class Motor(MovingComponent):

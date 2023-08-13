@@ -1,7 +1,7 @@
 from enum import Enum
-from MovingComponent import MovingComponent
-from Encoder import Encoder
-from Motor import Motor
+from .MovingComponent import MovingComponent
+from .Encoder import Encoder
+from .Motor import Motor
 
 
 class JointTypes(Enum):

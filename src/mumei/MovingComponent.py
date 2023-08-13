@@ -1,6 +1,6 @@
 from typing import List, Union
 from abc import abstractmethod
-from GenericComponent import GenericComponent
+from .GenericComponent import GenericComponent
 
 
 class MovingComponent(GenericComponent):

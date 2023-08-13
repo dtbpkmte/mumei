@@ -1,5 +1,5 @@
-from MovingComponent import MovingComponent
-from Joint import Joint
+from .MovingComponent import MovingComponent
+from .Joint import Joint
 from overrides import override
 from typing import List
 
