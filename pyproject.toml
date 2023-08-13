@@ -8,6 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
+overrides = "^7.4.0"
 
 [tool.poetry.dev-dependencies]
 

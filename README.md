@@ -5,7 +5,7 @@ A unified framework for robotics software
 ## Installation
 
 ```bash
-$ pip install mumei
+$ pip install -i https://test.pypi.org/simple/ mumei
 ```
 
 ## Usage
